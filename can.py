@@ -1,28 +1,11 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-from mplsoccer import Sbopen
-import cmasher as cmr
-
-#for saving data as ajson file
-import json
-#For Visualizations
+from mplsoccer import Sbopen,add_image
 from player_viz import passe,shot,pass_cross,transition, persure_juego, pressure_heatmap,mistake,defensive_actions,passnetwork,assists,player
-
-from mplsoccer import Pitch, FontManager
-import matplotlib.patheffects as path_effects
 from PIL import Image
-from matplotlib import rcParams
-from matplotlib.colors import LinearSegmentedColormap
-import matplotlib.pyplot as plt
-from PIL import Image
-from mplsoccer import Pitch, VerticalPitch, add_image, FontManager
-from scipy.spatial import Voronoi, voronoi_plot_2d
-import seaborn as sns
-from statsbombpy import sb
-#st.set_page_config(layout='wide')
 
-# Définir le style CSS pour utiliser la police Roboto
+
 st.markdown("""
     <style>
     .title {
@@ -87,13 +70,11 @@ st.markdown(sidebar_style,unsafe_allow_html=True)
 st.sidebar.title('')
 
 
-#st.sidebar.header("")   
 st.sidebar.header('')
 st.sidebar.header('Visualization filters')                                                                                                                                                                                                                                                                                                                                                                      
-# Ajoutez le style à l'application Streamlit
+
 st.markdown(sidebar_style, unsafe_allow_html=True)
-#rajouter une image sidebar
-# Chemin de l'image à afficher dans la barre latérale (remplacez par le chemin de votre image)
+
 image_path = 'https://ichef.bbci.co.uk/images/ic/1200x675/p0h4mqdq.jpg'
 
 title_style = """
@@ -135,7 +116,6 @@ header_style = """
     </style>
 """
 st.markdown(header_style, unsafe_allow_html=True)
-# Add CSS to style the footer
 st.markdown(
     """
     <style>
@@ -160,7 +140,6 @@ st.markdown(
 
 
 
-# Utiliser st.title() avec la classe de style spécifiée
 parser = Sbopen()
 df_competition = parser.competition()
 matches = parser.match(competition_id=1267, season_id=107)
@@ -175,9 +154,7 @@ def load_data(team_choice):
 
 teams=list(matches['home_team_name'].drop_duplicates())
 
-#st.subheader('Select your team ')
 
-#st.sidebar.markdown('Choose one or multiple teams')
 
 st.markdown(
     """
@@ -199,12 +176,11 @@ teams_choice = st.sidebar.selectbox('Team', teams)
 games = load_data(teams_choice)
 game=games[["match",'match_date','kick_off','home_score','away_score','competition_stage_name','stadium_name','stadium_country_name','referee_name','referee_country_name']].reset_index(drop=True)
 if teams_choice:
-    # Définition de la couleur du titre (en hexa)
-    header_color = '#F5F5DC'  # Choisissez une couleur appropriée
+    header_color = '#F5F5DC'  
 
 
 
-# Afficher un titre avec le style personnalisé
+
     st.markdown('<h1 class="custom-title">Match Information </h1>', unsafe_allow_html=True)
 
     text = "This table presents details of the matches played by the selected team in the 2023 Africa Cup of Nations."
@@ -219,15 +195,13 @@ if teams_choice:
 else: 
     st.header(' ')
 
-# Ajoutez vos styles CSS personnalisés
 mask_game=((matches.home_team_name==teams_choice)|(matches.away_team_name==teams_choice))
 matches=matches.loc[mask_game]
 match_list=list(matches['match'])
-#st.sidebar.subheader("Match")
-#st.sidebar.header('Match')
+
 
 match_choice=st.sidebar.selectbox('Match',match_list,index=None)
-#st.sidebar.header('VizZ type')
+
 
 plot_options=["Passing Network",'Passes','Pressure heat map','Pressure heat map Juego de Posición','Shots',"Forward passes",'Crosses','Mistakes','Defensive actions',"Assists","Player performance"]
 selected_plot = st.sidebar.selectbox('VizZ type:', plot_options)
@@ -519,8 +493,5 @@ else:
 
 
 
-#data_load_state = st.text('Loading data...')
-#data =parser.event(match_choice)[0]
 
-#data_load_state.text("Done! (using st.cache_data)")
 
